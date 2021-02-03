@@ -1,0 +1,10 @@
+from src.net import http
+
+if "args" not in dir():
+	print("dont run standalone")
+else:
+	if len(args) == 3:
+		if args[1].lower() == "get":
+			http.get(args[2])
+	else:
+		print("l8r")

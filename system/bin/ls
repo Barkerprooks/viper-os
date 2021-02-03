@@ -1,0 +1,22 @@
+import os, sys
+
+def list_directory(d):
+	for entry in os.ilistdir(d):
+		f = 'f' if entry[1] == 0x8000 else 'd'
+		n = entry[0] if f == 'f' else entry[0] + '/'
+		b = str(entry[3])
+		sys.stdout.write("%s - %s bytes" % (f, b) + (' '*(9 - len(b))) + "...%s\n" % n)
+
+if "args" not in dir():
+	sys.stderr.write("do not run from python directly")
+else:	
+	if len(args) >= 2:
+		for d in args[1:]:
+			try:
+				if len(args) > 2:
+					sys.stdout.write("%s:\n" % d)
+				list_directory(d)
+			except:
+				sys.stderr.write("%s: not a directory" % d)
+	else:
+		list_directory('')

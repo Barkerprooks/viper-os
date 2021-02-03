@@ -1,0 +1,4 @@
+from src.net import wifi
+
+for ap in wifi.scan():
+	print(ap)

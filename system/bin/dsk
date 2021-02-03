@@ -1,0 +1,21 @@
+import math, os
+
+stats = os.statvfs('/')
+block = stats[0]
+
+size = block * stats[2]
+free = block * stats[4]
+used = size - free
+available = ((1 / (size / free)) * 100)
+
+size = math.ceil(size / 1024)
+free = math.ceil(free / 1024)
+used = size - free
+
+progress = str('[' + '.'*10 + ']').replace('.', '=', int((100 - available) / 10) + 1)
+
+print("--------------------")
+print(" mnt | used")
+print("  /  | %s" % progress)
+print("--------------------")
+print("total: %d KiB\nused: %d KiB\nfree: %d KiB\navailable: %0.2f%%" % (size, used, free, available))

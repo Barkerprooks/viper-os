@@ -1,0 +1,2 @@
+from src.vos import vsh
+vsh.spawn()

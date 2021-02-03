@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+
+import os, zlib
+import upip_utarfile as tarfile
+
+def decompress(zipped):
+    unzipped = '.'.join(zipped.split('.')[:-1])
+    with open(zipped, "rb") as i:
+        compressed = i.read()
+        with open(unzipped, "wb+") as o:
+            o.write(zlib.decompress(compressed))
+    os.remove(zipped)
+    return unzipped
+
+
+def r_untarzip(zipped):
+    
+    unzipped = decompress(zipped)
+    untared = unzipped.split('.tar')[0]
+    
+    dirs = set()
+    files = {}
+    
+    os.mkdir(untared)
+
+    tar = tarfile.TarFile(unzipped)
+    os.remove(unzipped)
+    
+    entry = tar.next()
+
+    while entry:
+        path = '/' + '/'.join(entry.name.split('/')[1:])
+        if '@' not in path:
+            if entry.type == "dir":
+                dirs.add(path)
+            elif entry.type == "file":
+                files[path] = entry.subf.read()
+        entry = tar.next()
+
+    for d in dirs:
+        os.mkdir(d)
+
+    for f in files:
+        with open(f, "wb+") as o:
+            o.write(files[f])
+            o.close()
+
+        if f.endswith(".tar.zz"):
+            r_untarzip(f)
+        else:
+            decompress(f)
+
+r_untarzip("system.tar.zz")
+os.remove("system")

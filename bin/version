@@ -1,0 +1,2 @@
+import os
+print("MicroPython v%s" % os.uname()[2])

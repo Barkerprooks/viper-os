@@ -1,0 +1,17 @@
+import os, sys
+
+if "args" not in dir():
+	print("do not run directly from python")
+elif len(args) < 2:
+	print("usage %s <file 1> [<file 2> ...]")
+else:
+	for f in args[1:]:
+		try:
+			with open(f) as handle:
+				line = 1
+				while line:
+					line = handle.readline()
+					if line:
+						sys.stdout.write(line)
+		except:
+			print("could not open: %s" % f)
