@@ -60,7 +60,7 @@ def main(argv):
 
     thread.start()
     
-    if not upy_installed:
+    if upy_installed:
         print("MicroPython not installed")
         os.system("esptool.py -p /dev/ttyUSB0 erase_flash")
         os.system("esptool.py -p /dev/ttyUSB0 -b 460800 write_flash -z 0x1000 bin/upy_v1.13.bin")
@@ -72,7 +72,7 @@ def main(argv):
     zipname = r_tarzip(SYSROOT)
 
     print("wiping file system (backups not enabled)")
-    delay = 5
+    delay = 2
     while delay:
         msg = "press ctrl+c to cancel... will continue in %s" % delay
         print(msg, end='')

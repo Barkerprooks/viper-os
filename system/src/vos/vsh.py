@@ -11,8 +11,7 @@ class ViperShell:
     def parse_args(self, cmd):
         arg = ''
         args = []
-        in_quote = False
-        
+        in_quote = False        
         for token in cmd.split():
             if token[0] == '"':
                 in_quote = True
@@ -28,12 +27,9 @@ class ViperShell:
                     arg = ''
                 else:
                     args.append(token)
-
         if args[0] in ["exit", "quit"]:
             return False
-        
         args[0] = self.path + args[0]
-
         return args
 
     def execute(self, args, stream):
@@ -41,7 +37,6 @@ class ViperShell:
         if stream != sys.stdout:
             print("command sent: %s" % args)
             os.dupterm(stream)
-            
         try:
             with open(args[0]) as handle:
                 try:

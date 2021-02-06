@@ -15,19 +15,20 @@ class ViperShellServer(vsh.ViperShell):
         self.prompt()
 
     def prompt(self):
-        client, ip = self.sockfd.accept()
+        self.client, ip = self.sockfd.accept()
         print("%s connected" % ip[0])
 
         ps1 = str(self.ps1 % os.getcwd()).encode("utf-8")
-        client.send(ps1)
-        cmd = client.recv(4069).decode("utf-8")
+        
+        self.client.send(ps1)
+        cmd = self.client.recv(4069).decode("utf-8")
         args = self.parse_args(cmd)
 
         if args:
             self.execute(args, client)
-            client.close()
+            self.client.close()
             return True
         
-        client.close()
+        self.client.close()
         return False
 

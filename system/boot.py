@@ -1,4 +1,6 @@
 import select, network, os, sys, time
+from machine import Pin, sleep
+
 from src.vos import vsh
 from src.net import vshd
 
@@ -6,13 +8,23 @@ wifi = network.WLAN(network.AP_IF)
 wifi.active(True)
 print(wifi.ifconfig())
 
-shell = vshd.ViperShellServer(22)
-shell.start()
+led = Pin(2, Pin.OUT)
 
-services = [shell.sockfd]
+vsh_srv = vshd.ViperShellServer(22)
+vsh_srv.start()
 
-r,_,_ = select.select(services, [], [])
+rd_socks = [
+    vsh_srv.sockfd
+]
 
-while True:
-    if shell.sockfd in r:
-        shell.prompt()
+wr_socks = [
+    sys.stdout
+]
+
+rd,wr,_ = select.select(rd_socks, wr_socks, [])
+
+while 1:
+    led.off()
+    if vsh_srv.client in rd:
+        vsh_srv.prompt()
+        led.on()
