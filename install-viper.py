@@ -55,7 +55,7 @@ def r_tarzip(directory):
 
 def main(argv):
 
-    proc = subprocess.Popen(["ampy", "-p", "/dev/ttyUSB0", "run", "bin/version"])
+    proc = subprocess.Popen(["ampy", "-p", "/dev/ttyUSB0", "run", "bin/upy/version"])
     thread = threading.Timer(3, timeout, [proc])
 
     thread.start()
@@ -83,7 +83,7 @@ def main(argv):
         time.sleep(1)
         delay -= 1
 
-    os.system("ampy -p /dev/ttyUSB0 run bin/nuke-fs")
+    os.system("ampy -p /dev/ttyUSB0 run bin/upy/nuke-fs")
 
     print("uploading...")
     with subprocess.Popen(["ampy", "-p", "/dev/ttyUSB0", "put", zipname], stdout=subprocess.PIPE) as proc:
@@ -95,14 +95,15 @@ def main(argv):
     os.remove(zipname)
 
     print("unpacking file system...")
-    os.system("ampy -p /dev/ttyUSB0 run bin/extract-fs") 
-    os.system("ampy -p /dev/ttyUSB0 run bin/version")
+    os.system("ampy -p /dev/ttyUSB0 run bin/upy/extract-fs") 
+    os.system("ampy -p /dev/ttyUSB0 run bin/upy/version")
     os.system("ampy -p /dev/ttyUSB0 run system/bin/dsk")
 
 
 if __name__ == "__main__":
     print("ViperOS -- Install Tool")
     print(f"viper v{VERSION}")
+
     if os.getuid():
         print("must run as root for access to serial port (device), sorry! ;(")
         print("use: sudo %s" % sys.argv[0])
